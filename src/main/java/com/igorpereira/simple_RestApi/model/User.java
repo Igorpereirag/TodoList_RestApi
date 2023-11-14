@@ -45,6 +45,10 @@ public static final String TABLE_NAME ="usuarios";
     @JsonProperty(access = Access.WRITE_ONLY)
     private List<Task> tasks = new ArrayList<Task>();
 
+    public User orElseThrow(Object object) {
+        return null;
+    }
+
     
 
 }

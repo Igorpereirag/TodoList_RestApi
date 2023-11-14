@@ -2,10 +2,8 @@ package com.igorpereira.simple_RestApi.service;
 
 
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.igorpereira.simple_RestApi.model.Task;
 import com.igorpereira.simple_RestApi.model.User;
 import com.igorpereira.simple_RestApi.repository.TaskRepository;
 import com.igorpereira.simple_RestApi.repository.UserRepository;
@@ -23,7 +21,7 @@ public class UserService {
 
     private UserRepository userRepository;
     private TaskRepository taskRepository;
-    public User findByUserId(Long id) {
+    public User findById(Long id) {
         return this.userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
@@ -31,28 +29,14 @@ public class UserService {
     public User createUser(User user) {
         if (this.userRepository.findById(user.getId()).isPresent()) {
             throw new RuntimeException("Usuário com o mesmo ID já existe no banco de dados");
-        }
-        try {
-            // Tente salvar o usuário no repositório. O sistema de persistência gerará automaticamente o ID.
-            user = this.userRepository.save(user);
-            // Se o usuário tem tarefas associadas, salve-as também.
-            if (user.getTasks() != null && !user.getTasks().isEmpty()) {
-                for (Task task : user.getTasks()) {
-                    task.setUsuario(user); // Defina o usuário da tarefa para estabelecer a relação.
-                }
-                this.taskRepository.saveAll(user.getTasks());
-            }
-        } catch (DataIntegrityViolationException e) {
-            // Se uma exceção de violação de chave primária (ou similar) ocorrer, trate-a aqui.
-            throw new RuntimeException("Usuário com o mesmo ID já existe no banco de dados.");
-        }
-    
+        }           
+        user = this.userRepository.save(user);
         return user;
     }
     
     public User update(User newUser) {
         // Encontre o usuário existente com base no ID
-        User existingUser = findByUserId(newUser.getId());
+        User existingUser = findById(newUser.getId());
     
         // Atualize os campos do usuário com base nos valores fornecidos no novo usuário
 
