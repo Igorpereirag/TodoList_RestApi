@@ -22,31 +22,31 @@ public class TaskService {
     private TaskRepository taskrepository;
     private UserService userRepository;
 
-    public Task findtaskbyid(long id){
-
+    public Task findtaskbyid(long id) {
         Optional<Task> task = this.taskrepository.findById(id);
         return task.orElseThrow(() -> new RuntimeException("task not found with id: " + id));
-            
-        }
-        public Task create(Task task) {
-            // Verificar se o usuário associado à tarefa existe no banco de dados
-            Long userId = task.getUsuario().getId();
-            User user = this.userRepository.findById(userId);                 
-            task.setUsuario(user);
-        
-            // Salvar a tarefa no repositório
-           return this.taskrepository.save(task); 
 
-        }
-        
-        public Task upadate(Task newtask){
+    }
+
+    public Task create(Task task) {
+        // Verificar se o usuário associado à tarefa existe no banco de dados
+        Long userId = task.getUsuario().getId();
+        User user = this.userRepository.findById(userId);
+        task.setUsuario(user);
+
+        // Salvar a tarefa no repositório
+        return this.taskrepository.save(task);
+
+    }
+
+    public Task upadate(Task newtask) {
         Task task = findtaskbyid(newtask.getId());
         task.setDescription(newtask.getDescription());
         return taskrepository.save(task);
 
-        }
+    }
 
-        public void delete(long id){
+    public void delete(long id) {
         Task task = findtaskbyid(id);
         try {
             this.taskrepository.delete(task);
@@ -54,19 +54,6 @@ public class TaskService {
             throw new RuntimeException("description not found");
         }
 
-        }
-       
-    
-
-
-
-
-
-
-
     }
 
-
-
-  
-
+}
