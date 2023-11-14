@@ -2,10 +2,13 @@ package com.igorpereira.simple_RestApi.service;
 
 
 
+
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.igorpereira.simple_RestApi.model.User;
-import com.igorpereira.simple_RestApi.repository.TaskRepository;
+
 import com.igorpereira.simple_RestApi.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
@@ -19,28 +22,40 @@ import lombok.NoArgsConstructor;
 @Data
 public class UserService {
 
+    @Autowired
     private UserRepository userRepository;
-    private TaskRepository taskRepository;
+   
+
     public User findById(Long id) {
         return this.userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
     
-    public User createUser(User user) {
-        if (this.userRepository.findById(user.getId()).isPresent()) {
+    public void createUser(User newUser) {
+        // Verificar se o usuário com o mesmo ID já existe
+        if (this.userRepository.findById(newUser.getId()).isPresent()) {
             throw new RuntimeException("Usuário com o mesmo ID já existe no banco de dados");
-        }           
-        user = this.userRepository.save(user);
-        return user;
+        }
+    
+        // Verificar se o usuário com o mesmo username já existe
+        User existingUser = this.userRepository.findByUsername(newUser.getUsername());
+    
+        if (existingUser != null) {
+            throw new RuntimeException("Usuário com o mesmo username já existe no banco de dados");
+        }
+    
+        // Salvar o novo usuário
+        this.userRepository.save(newUser);
     }
     
-    public User update(User newUser) {
+    
+    public User update(User user) {
         // Encontre o usuário existente com base no ID
-        User existingUser = findById(newUser.getId());
+        User existingUser = findById(user.getId());
     
         // Atualize os campos do usuário com base nos valores fornecidos no novo usuário
 
-        existingUser.setPassword(newUser.getPassword()); // Certifique-se de criptografar a senha, se necessário
+        existingUser.setPassword(user.getPassword()); // Certifique-se de criptografar a senha, se necessário
         // Adicione mais campos para atualização, se necessário
     
         // Salve o usuário atualizado no repositório
@@ -51,8 +66,8 @@ public class UserService {
     
     public void delete(Long userId) {
         // Verifique se o usuário existe antes de tentar excluí-lo
-        if (userRepository.existsById(userId)) {
-            userRepository.deleteById(userId);
+        if (this.userRepository.existsById(userId)) {
+            this.userRepository.deleteById(userId);
         } else {
             throw new RuntimeException("Usuário não encontrado para exclusão.");
         }

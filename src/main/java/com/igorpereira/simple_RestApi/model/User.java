@@ -49,6 +49,10 @@ public static final String TABLE_NAME ="usuarios";
         return null;
     }
 
+    public boolean isPresent() {
+        return false;
+    }
+
     
 
 }
