@@ -1,6 +1,5 @@
 package com.igorpereira.simple_RestApi.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -41,9 +40,9 @@ public static final String TABLE_NAME ="usuarios";
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "user")
     @JsonProperty(access = Access.WRITE_ONLY)
-    private List<Task> tasks = new ArrayList<Task>();
+    private List<Task> tasks;
 
     public User orElseThrow(Object object) {
         return null;
