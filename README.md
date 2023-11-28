@@ -51,7 +51,5 @@ possui uma interface html na pasta "view" feita com bootstrap e javascript contu
 Contribuição
 Sinta-se à vontade para contribuir para o desenvolvimento deste projeto. Basta seguir as práticas de contribuição padrão e enviar uma solicitação de pull.
 
-Licença
-Este projeto é licenciado sob a Licença MIT - consulte o arquivo LICENSE para obter detalhes.
 
 STATUS: Em aprimoramento
